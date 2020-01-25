@@ -1,0 +1,325 @@
+/*
+ * Amanda Hegidus
+ * 21 February 2018
+ * CSC 220
+http://raider.mountunion.edu/csc/CSC220/Spring2018/
+
+Project Description: Create a working card game using the Card class subclass (HegidusCard), displaying multiple cards, 
+use MouseListener and/or MouseMotionListener, use a random number, display a congratulations message if the user wins the game,
+have the user able to view game rules, and have the user able to restart/start a new game.
+The game is Game of Elevens Solitaire.
+Date: 19 March 2018
+Course: CSC 220
+Organization: this is the panel that will be displayed when MainFrame in demoMenusAndCardLayout package. this panel will display
+9 HegidusCards, setting their boolean used to true, has a button to display the game rules of Elevens Solitaire in a JOptionPane,
+and has a button that restarts the game/starts a new game.
+Enhancement: boolean of whether a card has been used/displayed, dragging cards
+
+* this is my panel that is displayed when MainFrame from package demoMenusAndCardLayout is run.
+ */
+package stuHegidus;
+
+import helpers.Utility;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import javax.swing.JOptionPane;
+
+public class HegidusPanel extends javax.swing.JPanel implements MouseListener, MouseMotionListener {
+
+    private Font myFont;
+    private HegidusMultiCard hmultiCard; //this is the "deck" of cards
+    private boolean beginningofgame = true; //marks the start of a new game by being true
+    private HegidusCard[] cardsout; //list of the cards currently displayed in the panel
+    private HegidusCard[] selectedcards; //list of the cards that get selected when the user tries to make a match
+    private int cardselectnum = 0; //keeps track of what number selection from the user the program is on (will be 0, 1, or 2)
+    
+    //for other tests:
+    private HegidusCat milo;
+    private HegidusMovableThing movingthing;
+    private boolean boxmoving;
+    private boolean cardmoving;
+    private HegidusCard hCard;
+
+    public HegidusPanel() {
+        initComponents();
+        addMouseListener(this);
+        addMouseMotionListener(this);
+        myFont = new Font("Serif", Font.BOLD, 20);
+        //other testing:
+        //milo=new HegidusCat("Milo");
+        //movingthing = new HegidusMovableThing(0,0,50,50,Color.CYAN);
+        //boxmoving=false;
+        /*int randomCardIndex = Utility.getRandomFromTo(0, 51);
+        hCard = hmultiCard.getCardAtIndex(randomCardIndex);
+        hCard.setOver(50);*/
+        hmultiCard = new HegidusMultiCard();
+        cardsout = new HegidusCard[10];
+        selectedcards = new HegidusCard[10];
+    }
+
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.setColor(new Color(255, 200, 200));
+        g.fillRect(0, 0, 2000, 2000);
+        g.setFont(myFont);
+        g.setColor(Color.BLACK);
+        g.drawString("HegidusPanel", 15, 20);
+        g.drawString("Welcome!", 15, 50);
+        
+        //other testing:
+        //g.drawString("ACH", 50, 50);
+        //myFont=new Font("Helvetica", Font.BOLD | Font.ITALIC,22);
+        //g.setFont(myFont);
+        //g.drawString(milo.toString(), 50, 200);
+        //hCard.drawCard(g, this);
+        //movingthing.drawMe(g);
+        
+        g.setColor(Color.LIGHT_GRAY);
+        g.fillRect(0, 200, 1000, 250);
+        
+        newGame(beginningofgame);
+        for(int i=0; i<cardsout.length; i++){ //draw the 10 cards
+            cardsout[i].drawCard(g, this);
+        }
+        
+        
+    }
+
+    public void newGame(boolean newgametrue){
+        if (beginningofgame == true) { //displays 10 cards to start the game
+            int cards = 0; //keeps track of how many cards have been added to cardsout
+            int randomnum = 0; //used in selecting a random card from the "deck"
+            int currentover = 50; //keeps track of the positioning of the cards so no cards overlap
+            while(cards<10){ //stops once there is 10 cards
+                randomnum = Utility.getRandomFromTo(0, 51);
+                if (hmultiCard.getCardAtIndex(randomnum).getUsed() == false) { //if not used, display card. if used, cards does not change
+                    hmultiCard.getCardAtIndex(randomnum).setOver(currentover);
+                    hmultiCard.getCardAtIndex(randomnum).setDown(150);
+                    currentover += 75;
+                    hmultiCard.getCardAtIndex(randomnum).setUsed(true);
+                    cardsout[cards] = hmultiCard.getCardAtIndex(randomnum);
+                    cards++;
+                }
+            }
+        }
+        beginningofgame = false; //game has started, reset to false
+    }
+    
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        gameRulesButton = new javax.swing.JButton();
+        newGameButton = new javax.swing.JButton();
+        checkButton = new javax.swing.JButton();
+
+        gameRulesButton.setText("Game Rules");
+        gameRulesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                gameRulesButtonActionPerformed(evt);
+            }
+        });
+
+        newGameButton.setText("New Game");
+        newGameButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newGameButtonActionPerformed(evt);
+            }
+        });
+
+        checkButton.setText("Check");
+        checkButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 411, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(gameRulesButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(newGameButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(checkButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(newGameButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(gameRulesButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(checkButton)
+                .addGap(0, 214, Short.MAX_VALUE))
+        );
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void gameWinMessage(){
+        //will display the a message when the game is won and resets the game
+        System.out.println("You win!");
+        JOptionPane.showMessageDialog(this, "Congrtulations! You win!!");
+        System.out.println("Game Reset");
+        for (int i = 0; i < 52; i++) { //reset cards so none have been used
+            hmultiCard.getCardAtIndex(i).setUsed(false);
+        }
+        beginningofgame = true;//reset
+        repaint();//redraw the cards with repaint
+    }
+    
+    private void gameRulesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gameRulesButtonActionPerformed
+        //will display the HegidusGameRules message for the game
+        System.out.println("Game Rules displayed");
+        JOptionPane.showMessageDialog(this, "Game rules:\nYou are dealt 10 cards randomly. From these cards, drag and drop them\n"
+                + "into the gray rectangle in descending order.\n"
+                + "Ace is the lowest and King is the highest card.\n"
+                + "To win, have the cards in the right order and click the Check button.\n"
+                + "You must click and drag the cards in the right order origninally.");
+    }//GEN-LAST:event_gameRulesButtonActionPerformed
+
+    private void newGameButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newGameButtonActionPerformed
+        //resets the game: sets all cards' boolean used to false, displays 9 cards and sets their boolean used to true,
+        //and resets discarded pile
+        System.out.println("Game Reset");
+        for (int i = 0; i < 52; i++) { //reset cards so none have been used
+            hmultiCard.getCardAtIndex(i).setUsed(false);
+        }
+        beginningofgame = true;//resets
+        repaint();//redraws the cards with repaint
+    }//GEN-LAST:event_newGameButtonActionPerformed
+
+    private void checkButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkButtonActionPerformed
+        //this method check the cards in the gray rectangle. to win, the cards must be in descending order.
+        int countgreatercards=0;
+        for(int i=1; i<selectedcards.length; i++){
+            if(selectedcards[i-1].getValue()>selectedcards[i].getValue() || selectedcards[i-1].getValue()==selectedcards[i].getValue())
+                countgreatercards++;
+        }
+        if(countgreatercards==9)
+            gameWinMessage();
+        else{
+            JOptionPane.showMessageDialog(this,"Try again!");
+            beginningofgame=true;//restarts
+            repaint();//redraws the cards with repaint
+        }
+    }//GEN-LAST:event_checkButtonActionPerformed
+
+    @Override
+    public void mouseClicked(MouseEvent me) {
+        /*int x = me.getX();
+        int y = me.getY();
+        System.out.println("mouseClicked at "+x+", "+y);*/
+    }
+
+    @Override
+    public void mousePressed(MouseEvent me) {
+        int x=me.getX();
+        int y=me.getY();
+        //System.out.println("mousePressed at "+x+", "+y);
+        
+        //boxmoving with the square
+        /*if (movingthing.contains(x, y))        {
+            boxmoving = true;
+        }
+        else        {
+            boxmoving = false;
+        }*/
+        /*
+        
+        //cardmoving with hCard
+        if(x>hCard.getOver() && x<(hCard.getOver()+hCard.getImage().getWidth())
+                && y>hCard.getDown() && y<(hCard.getDown()+hCard.getImage().getHeight())){
+            cardmoving=true;
+        }
+        else
+            cardmoving=false;
+        */
+        
+        //moving cards with cardsout
+        for(int i=0; i<cardsout.length; i++){
+            if(x>cardsout[i].getOver() && x<(cardsout[i].getOver()+cardsout[i].getImage().getWidth())
+                    && y>cardsout[i].getDown() && y<(cardsout[i].getDown()+cardsout[i].getImage().getHeight())){
+                cardsout[i].setMoving(true);
+                selectedcards[cardselectnum]=cardsout[i];
+                cardselectnum++;
+            }
+            else
+                cardsout[i].setMoving(false);
+        }
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent me) {
+        //System.out.println("mouseReleased at "+me.getX()+", "+me.getY());
+        //moving the square and hCard
+        //System.out.println("   moving  "+boxmoving);
+        //boxmoving = false;
+        //System.out.println("   moving  "+boxmoving);
+        //if (boxmoving) {boxmoving=false;}
+        //if (cardmoving){cardmoving=false;}
+        
+        //moving the cards from cardsout
+        for(int i=0; i<cardsout.length; i++){
+            if(cardsout[i].getMoving()==true)
+                cardsout[i].setMoving(false);
+        }
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent me) {
+        //System.out.println("mouseEntered at "+me.getX()+", "+me.getY());
+    }
+
+    @Override
+    public void mouseExited(MouseEvent me) {
+        //System.out.println("mouseExited at "+me.getX()+", "+me.getY());
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent me) {
+        int x = me.getX();
+        int y = me.getY();
+        //System.out.println("mouseDragged at " + x + ", " + y);
+        /*if (boxmoving){
+            movingthing.setMiddleX(x);
+            movingthing.setMiddleY(y);
+            repaint();
+        }*/
+        /*if (cardmoving){
+            hCard.setDown(y);
+            hCard.setOver(x);
+            repaint();
+        }*/
+        for(int i=0; i<cardsout.length; i++){
+            if(cardsout[i].getMoving()==true){
+                cardsout[i].setDown(y);
+                cardsout[i].setOver(x);
+                repaint();
+            }
+        }
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent me) {
+        //System.out.println("mouseMoved at "+me.getX()+", "+me.getY());
+    }
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton checkButton;
+    private javax.swing.JButton gameRulesButton;
+    private javax.swing.JButton newGameButton;
+    // End of variables declaration//GEN-END:variables
+}

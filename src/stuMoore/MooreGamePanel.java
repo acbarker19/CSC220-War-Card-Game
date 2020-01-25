@@ -1,0 +1,755 @@
+/*
+ * Name: Andrew Moore
+ * Date: 2/23/18
+ * Class: MooreGamePanel
+ * Description: This project was about creating a card game in which you can play 
+ * possibly using buttons or mouse events. it would also use a sub class, MooreSubCard, 
+ * in this case. Also, it would use and ArrayList in which, you could add and remove at any
+ * part. The obbjective of the game is to win/lose, either outcome would give a special 
+ * message in one way or another saying what happened.
+ *******************************************************************************
+ *                  Random varible === Shuffle method****                      *
+ *******************************************************************************
+ * Enhancement(s): a message dialog for the game rules/info and a built 
+ * in shuffle method from the java docs and a label that shows how cards are 
+ * left in the deck and how many cards are in the winning deck
+ */
+package stuMoore;
+
+import helperCards.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
+import javax.swing.JOptionPane;
+
+/**
+ * @author andrew_moore
+ */
+public class MooreGamePanel extends javax.swing.JPanel implements MouseListener, MouseMotionListener {
+
+    private MultiCard multiCard;                                                             //to recieve the whole deck and use as an input for the "cards" Array
+    private ArrayList<Card> cards;                                                           //defult starter deck, reference
+    private ArrayList<MooreSubCard> deck, Player, CPU, PlayerWin, CPUWin, PlayerWar, CPUWar; //PlayerWin and CPUWin are storage 
+    private Random gen;                                                                      //^ locations for cards and PlayerWar 
+    private Boolean PlayerVictor=false, CPUVictor=false, catClass=false;                     //^ and CPUWar are to test the values 
+    private String PlayerName;                                                               //^ to see who wins
+    private MoorePanel moorePanel;
+    
+    /**
+     * Creates new form GamePanel1
+     */
+    public MooreGamePanel() {
+        initComponents();
+        
+        
+        addMouseListener(this);
+        addMouseMotionListener(this);
+        
+        //set extra buttons invisible
+        MooreCatClassToggle.setVisible(false);
+        
+        //<editor-fold defaultstate="collapsed" desc="Instantiations">
+        //Instantiate
+        multiCard   = new MultiCard();
+        cards       = new ArrayList<>();
+        deck        = new ArrayList<>();
+        Player      = new ArrayList<>();
+        PlayerWin   = new ArrayList<>();
+        CPU         = new ArrayList<>();
+        CPUWin      = new ArrayList<>();
+        PlayerWar   = new ArrayList<>();
+        CPUWar      = new ArrayList<>();
+        gen         = new Random();
+        //</editor-fold>
+        
+        //<editor-fold defaultstate="collapsed" desc="Constructors">
+        //constructor
+        for (Integer i=0; i<52; i++){
+            cards.add(multiCard.getCardAtIndex(i));
+        }
+        
+        int x=gen.nextInt(400);
+        for (Integer i=0; i<52; i++){
+            deck.add(new MooreSubCard(cards.get(i).getSuit(), cards.get(i).getValue(),
+                    x,cards.get(i).getDown(),cards.get(i).getImage()));
+        }
+        
+        for (Integer i=0; i<52; i+=13){
+            deck.get(i).setValue(14);
+        }
+        //</editor-fold>
+        
+    }
+    
+    public void paintComponent(Graphics g)
+    {
+        super.paintComponent(g);
+        
+        g.setColor(new Color(255,200,200));
+        g.fillRect(0,0,1000,1000);
+        
+        //check to see if array list is empty or not so it only draws if theres somthing in the list
+        if (!deck.isEmpty()){
+            for (Integer i=0;i<deck.size();i++){
+                deck.get(i).drawCard(g, this);
+            }
+        }
+        
+        if (!Player.isEmpty()){
+            for (Integer i=0;i<Player.size();i++){
+                Player.get(i).drawCard(g, this);
+            }
+        }
+        
+        if (!CPU.isEmpty()){
+            for (Integer i=0;i<CPU.size();i++){
+                CPU.get(i).drawCard(g, this);
+            }
+        }
+        
+        if (!PlayerWar.isEmpty()){
+            for (Integer i=0;i<PlayerWar.size();i++){
+                PlayerWar.get(i).drawCard(g, this);
+            }
+        }
+        
+        if (!CPUWar.isEmpty()){
+            for (Integer i=0;i<CPUWar.size();i++){
+                CPUWar.get(i).drawCard(g, this);
+            }
+        }
+        
+        ShowPlayerDeckAmount.setText("Player deck total: "+Player.size()+", Player wins deck total: "+PlayerWin.size());
+        ShowCPUDeckAmount.setText("CPU deck total: "+CPU.size()+", CPU wins deck total: "+CPUWin.size());
+        
+    }
+    
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        NewGameButton = new javax.swing.JButton();
+        StartGameButton = new javax.swing.JButton();
+        ResetButton = new javax.swing.JButton();
+        NextTurn = new javax.swing.JButton();
+        ProcessValues = new javax.swing.JButton();
+        rulesButton = new javax.swing.JButton();
+        MooreCatClassToggle = new javax.swing.JToggleButton();
+        ExtraButtons = new javax.swing.JToggleButton();
+        ShowPlayerDeckAmount = new javax.swing.JLabel();
+        ShowCPUDeckAmount = new javax.swing.JLabel();
+
+        NewGameButton.setText("New Game");
+        NewGameButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NewGameButtonActionPerformed(evt);
+            }
+        });
+
+        StartGameButton.setText("Start Game");
+        StartGameButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                StartGameButtonActionPerformed(evt);
+            }
+        });
+
+        ResetButton.setText("Reset");
+        ResetButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ResetButtonActionPerformed(evt);
+            }
+        });
+
+        NextTurn.setText("Next Turn");
+        NextTurn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NextTurnActionPerformed(evt);
+            }
+        });
+
+        ProcessValues.setText("WAR ");
+        ProcessValues.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ProcessValuesActionPerformed(evt);
+            }
+        });
+
+        rulesButton.setText("Rules and Info");
+        rulesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rulesButtonActionPerformed(evt);
+            }
+        });
+
+        MooreCatClassToggle.setText("MooreCat Class Toggle");
+        MooreCatClassToggle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MooreCatClassToggleActionPerformed(evt);
+            }
+        });
+
+        ExtraButtons.setText("Extras");
+        ExtraButtons.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ExtraButtonsActionPerformed(evt);
+            }
+        });
+
+        ShowPlayerDeckAmount.setText("ShowPlayerDeckAmount");
+
+        ShowCPUDeckAmount.setText("ShowCPUDeckAmount");
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(47, 604, Short.MAX_VALUE)
+                        .addComponent(MooreCatClassToggle)
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(NextTurn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ProcessValues)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(rulesButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(StartGameButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(NewGameButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ResetButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                        .addComponent(ExtraButtons)
+                        .addGap(33, 33, 33))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(ShowCPUDeckAmount)
+                            .addComponent(ShowPlayerDeckAmount))
+                        .addGap(71, 71, 71))))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(ShowPlayerDeckAmount)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(ShowCPUDeckAmount)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 370, Short.MAX_VALUE)
+                .addComponent(MooreCatClassToggle)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(NextTurn)
+                    .addComponent(ProcessValues)
+                    .addComponent(StartGameButton)
+                    .addComponent(NewGameButton)
+                    .addComponent(ResetButton)
+                    .addComponent(rulesButton)
+                    .addComponent(ExtraButtons))
+                .addGap(22, 22, 22))
+        );
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void NewGameButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewGameButtonActionPerformed
+        
+        
+        PlayerName=JOptionPane.showInputDialog("Please Type Your Name Below:");
+        
+        //Clear all decks than create a brand new starter deck
+        deck.clear();
+        Player.clear();
+        PlayerWin.clear();
+        PlayerWar.clear();
+        CPU.clear();
+        CPUWin.clear();
+        CPUWar.clear();
+        
+        int x = gen.nextInt(300);
+        
+        for (Integer i=0; i<52; i++){
+            deck.add(new MooreSubCard(cards.get(i).getSuit(), cards.get(i).getValue(),
+                    x,cards.get(i).getDown(),cards.get(i).getImage()));
+        }
+        
+        for (Integer i=0; i<52; i+=13){
+            deck.get(i).setValue(14);
+        }
+        
+        //<editor-fold defaultstate="collapsed" desc="Shuffle Overboard">
+        Shuffle(deck);
+        Shuffle(deck);
+        Shuffle(deck);
+        Shuffle(deck);
+        Shuffle(deck);
+        Shuffle(deck);
+        Shuffle(deck);
+        Shuffle(deck);
+        Shuffle(deck);
+        //</editor-fold>
+        
+        //split into the two decks CPU and Player
+        for (int in=0;in<52;in++){
+            if (in%2==0){
+                Player.add(deck.get(in));
+            }else{
+                CPU.add(deck.get(in));
+            }
+        }
+        
+        for (int in=0;in<Player.size();in++){
+            Player.get(in).setOver(600);
+            Player.get(in).setFaceDown();
+        }
+        
+        for (int in=0;in<CPU.size();in++){
+            CPU.get(in).setOver(50);
+            CPU.get(in).setFaceDown();
+        }
+        
+        deck.clear();
+        repaint();
+    }//GEN-LAST:event_NewGameButtonActionPerformed
+
+    private void StartGameButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StartGameButtonActionPerformed
+        
+        PlayerName=JOptionPane.showInputDialog("Please Type Your Name Below:");
+
+        //<editor-fold defaultstate="collapsed" desc="Shuffle Overboard">
+        Shuffle(deck);
+        Shuffle(deck);
+        Shuffle(deck);
+        Shuffle(deck);
+        Shuffle(deck);
+        Shuffle(deck);
+        Shuffle(deck);
+        Shuffle(deck);
+        Shuffle(deck);
+        //</editor-fold>
+        
+        //split deck into 2 hands CPU and Player
+        for (int in=0;in<52;in++){
+            if (in%2==0){
+                Player.add(deck.get(in));
+            }else{
+                CPU.add(deck.get(in));
+            }
+        }
+        
+        
+        for (int in=0;in<Player.size();in++){
+            Player.get(in).setOver(600);
+            Player.get(in).setFaceDown();
+        }
+        
+        for (int in=0;in<CPU.size();in++){
+            CPU.get(in).setOver(50);
+            CPU.get(in).setFaceDown();
+        }
+        
+        deck.clear();
+        repaint();
+    }//GEN-LAST:event_StartGameButtonActionPerformed
+
+    private void ResetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ResetButtonActionPerformed
+        
+        //clear all decks and make the defult deck again, like how the panel opened up
+        deck.clear();
+        Player.clear();
+        PlayerWin.clear();
+        PlayerWar.clear();
+        CPU.clear();
+        CPUWin.clear();
+        CPUWar.clear();
+        
+        int x = gen.nextInt(450);
+        for (Integer i=0; i<52; i++){
+            deck.add(new MooreSubCard(cards.get(i).getSuit(), cards.get(i).getValue(),
+                    x,cards.get(i).getDown(),cards.get(i).getImage()));
+        }
+        
+        for (Integer i=0; i<52; i+=13){
+            deck.get(i).setValue(14);
+        }
+        
+        System.out.println("RESET BUTTON PRESSED");
+        for (Integer i=0; i<52; i++){
+            System.out.println(i+" "+deck.get(i).toString());
+        }
+        repaint();
+    }//GEN-LAST:event_ResetButtonActionPerformed
+
+    private void NextTurnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NextTurnActionPerformed
+        Shuffle(Player);
+        PlayerWar.add(Player.get(Player.size()-1));
+        Player.remove(Player.get(Player.size()-1));
+        PlayerWar.get(0).setOver(365);
+        PlayerWar.get(0).setImage();
+        
+        
+        Shuffle(CPU);
+        CPUWar.add(CPU.get(CPU.size()-1));
+        CPU.remove(CPU.get(CPU.size()-1));
+        CPUWar.get(0).setOver(289);
+        CPUWar.get(0).setImage();
+        repaint();
+    }//GEN-LAST:event_NextTurnActionPerformed
+
+    private void ProcessValuesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ProcessValuesActionPerformed
+        ProcessCards();
+        repaint();
+        if (PlayerVictor){
+            PlayerWin.addAll(PlayerWar);
+            PlayerWin.addAll(CPUWar);
+            PlayerVictor=false;
+            PlayerWar.clear();
+            CPUWar.clear();
+        }else if (CPUVictor){
+            CPUWin.addAll(CPUWar);
+            CPUWin.addAll(PlayerWar);
+            CPUVictor=false;
+            PlayerWar.clear();
+            CPUWar.clear();
+        }
+        refillPlayerDeck();
+        refillCPUDeck();
+        repaint();
+    }//GEN-LAST:event_ProcessValuesActionPerformed
+
+    private void rulesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rulesButtonActionPerformed
+        JOptionPane.showMessageDialog(null, 
+                "Game Info and Rules: \n Scoring or rank of cards:"
+                + "\n The point values go as follows for all suits:"
+                + "\n\t\t\t\t 2= 2, 3= 3, 4= 4"
+                + "\n\t\t\t\t 5= 5, 6= 6, 7= 7"
+                + "\n\t\t\t\t 8= 8, 9= 9, 10= 10"
+                + "\n\t\t\t\t Jack= 11, Queen= 12"
+                + "\n\t\t\t\t King= 13, Ace= 1"
+                
+                        
+                + "\n When Deciding the victor, the highest card wins"
+                + "\n\n For this game in order to player there are two options"
+                + "\n (1) click the following buttons"
+                + "\n\t\t\t\t when you click the 'Next Turn' Button it will"
+                + "\n\t\t\t\t Flip the card over so you can see what your card is"
+                + "\n\t\t\t\t next when you click the \"WAR\" Button it will"
+                + "\n\t\t\t\t Decide who the victor of the round is"
+                + "\n (2) click the following cards:"
+                + "\n\t\t\t\t when you click the ether pile of FaceDown cards it will"
+                + "\n\t\t\t\t Flip the card over so you can see what your card is"
+                + "\n\t\t\t\t next when you click ether face up card showing it's value"
+                + "\n\t\t\t\t it will decide who the victor of the round is"
+                
+                        
+                + "\n\n Info about the other buttons:"
+                + "\n The \"Start Game\" button:"
+                + "\n\t\t\t\t splits and shuffles the Oringinal Deck"
+                + "\n\t\t\t\t So, Hit this first, then for"
+                + "\n\t\t\t\t further games hit \"New Game\""
+                + "\n\t\t\t\t OR you can click the one pile of face up cards to begin"
+                
+                
+                + "\n The \"New Game\" button:"
+                + "\n\t\t\t\t Resets game no matter what"
+                + "\n\t\t\t\t stage of the game your at then"
+                + "\n\t\t\t\t splits and shuffles the Oringinal Deck"
+                + "\n\t\t\t\t and then starts a new game"
+                
+                
+                + "\n The \"Reset\" button:"
+                + "\n\t\t\t\t resets the whole panel to how"
+                + "\n\t\t\t\t it was when you first opened it up"
+                
+                
+                + "\n The \"Extra\" button:"
+                + "\n\t\t\t\t makes a couple of other buttons appear the "
+                + "\n\t\t\t\t \"MooreCat Class Toggle\" button makes the MooreCat.toString() appear"
+                + "\n\t\t\t\t and the \"Go To Demos (not part of game)\" opens up"
+                + "\n\t\t\t\t a new window with demos of methods that were used in this project");
+        
+    }//GEN-LAST:event_rulesButtonActionPerformed
+
+    private void MooreCatClassToggleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MooreCatClassToggleActionPerformed
+        moorePanel.catClass = MooreCatClassToggle.isSelected();
+        moorePanel.repaint();
+        repaint();
+    }//GEN-LAST:event_MooreCatClassToggleActionPerformed
+
+    private void ExtraButtonsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExtraButtonsActionPerformed
+        if (ExtraButtons.isSelected()){
+            MooreCatClassToggle.setVisible(true);
+        }else{
+            MooreCatClassToggle.setVisible(false);
+        }
+        moorePanel.repaint();
+        repaint();
+    }//GEN-LAST:event_ExtraButtonsActionPerformed
+
+    public void ProcessCards(){
+        if (PlayerWar.get(PlayerWar.size()-1).getValue() 
+                > CPUWar.get(CPUWar.size()-1).getValue()){
+            PlayerVictor=true;
+        }else if (PlayerWar.get(PlayerWar.size()-1).getValue() 
+                < CPUWar.get(CPUWar.size()-1).getValue()){
+            CPUVictor=true;
+        }else if (PlayerWar.get(PlayerWar.size()-1).getValue()
+                ==CPUWar.get(CPUWar.size()-1).getValue()){
+            int xP= (PlayerWar.get(PlayerWar.size()-1).getOver())+10;
+            int xC= (CPUWar.get(CPUWar.size()-1).getOver())-10;
+            
+            if (Player.isEmpty()){
+                CPUVictor=true;
+            }
+            if (CPU.isEmpty()){
+                PlayerVictor=true;
+            }
+            
+            //
+            //Check to see if only one card is left in hand
+            //
+            if (Player.size()==1 || CPU.size()==1){
+                PlayerWar.add(Player.get(0));
+                Player.remove(Player.get(0));
+                PlayerWar.get(PlayerWar.size()-1).setOver(xP+=10);
+                PlayerWar.get(PlayerWar.size()-1).setImage();
+                
+                CPUWar.add(CPU.get(0));
+                CPU.remove(CPU.get(0));
+                CPUWar.get(CPUWar.size()-1).setOver(xC-=10);
+                CPUWar.get(CPUWar.size()-1).setImage();
+            }
+            
+            //
+            //Check to see if only two cards are left in hand
+            //
+            if (Player.size()<=2 && Player.size()>=1 || CPU.size()<=2 && CPU.size()>=1){
+                PlayerWar.add(Player.get(0));
+                Player.remove(Player.get(0));
+                PlayerWar.get(PlayerWar.size()-1).setOver(xP+=10);
+                PlayerWar.get(PlayerWar.size()-1).setFaceDown();
+                PlayerWar.add(Player.get(0));
+                Player.remove(Player.get(0));
+                PlayerWar.get(PlayerWar.size()-1).setOver(xP+=10);
+                PlayerWar.get(PlayerWar.size()-1).setFaceDown();
+                
+                CPUWar.add(CPU.get(0));
+                CPU.remove(CPU.get(0));
+                CPUWar.get(CPUWar.size()-1).setOver(xC-=10);
+                CPUWar.get(CPUWar.size()-1).setFaceDown();
+                CPUWar.add(CPU.get(0));
+                CPU.remove(CPU.get(0));
+                CPUWar.get(CPUWar.size()-1).setOver(xC-=10);
+                CPUWar.get(CPUWar.size()-1).setFaceDown();
+            }
+            
+            //
+            //check to see if there are more than 3 cards in hand
+            //
+            if (Player.size()>=3){
+                for (int i=0;i<=1;i++){
+                PlayerWar.add(Player.get(Player.size()-1));
+                Player.remove(Player.get(Player.size()-1));
+                PlayerWar.get(PlayerWar.size()-1).setOver(xP+=10);
+                PlayerWar.get(PlayerWar.size()-1).setFaceDown();
+                }
+                PlayerWar.add(Player.get(Player.size()-1));
+                Player.remove(Player.get(Player.size()-1));
+                PlayerWar.get(PlayerWar.size()-1).setOver(xP+=10);
+                PlayerWar.get(PlayerWar.size()-1).setImage();
+            }
+            if (CPU.size()>=3){
+                for (int i=0;i<=1;i++){
+                CPUWar.add(CPU.get(CPU.size()-1));
+                CPU.remove(CPU.get(CPU.size()-1));
+                CPUWar.get(CPUWar.size()-1).setOver(xC-=10);
+                CPUWar.get(CPUWar.size()-1).setFaceDown();
+                }
+                CPUWar.add(CPU.get(CPU.size()-1));
+                CPU.remove(CPU.get(CPU.size()-1));
+                CPUWar.get(CPUWar.size()-1).setOver(xC-=10);
+                CPUWar.get(CPUWar.size()-1).setImage();
+            }
+        }
+        repaint();
+    }
+    
+    public void Shuffle(ArrayList deck){
+        //                                                      //
+        //Random varible used within shuffle method from java   //
+        //                                                      //
+        Collections.shuffle(deck);
+    }
+    
+    public void refillPlayerDeck(){
+        
+        if (Player.isEmpty()){
+            //shuffles winning cards so its not all high cards first
+            Shuffle(PlayerWin);
+            for (Integer i=0;i<PlayerWin.size();i++){
+                Player.add(PlayerWin.get(i));
+                Player.get(i).setFaceDown();
+                Player.get(i).setOver(600);
+            }
+            PlayerWin.clear();
+        }
+        if (Player.size()+PlayerWin.size()==cards.size()){
+            JOptionPane.showMessageDialog(null, "Hey "+PlayerName+", you have beaten the CPU and won!");
+            System.out.println("PLAYER WINS");
+        }
+        repaint();
+    }
+    
+    public void refillCPUDeck(){
+        if (CPU.isEmpty()){
+            //shuffles winning cards so its not all high cards first
+            Shuffle(CPUWin);
+            for (Integer i=0;i<CPUWin.size();i++){
+                CPU.add(CPUWin.get(i));
+                CPU.get(i).setFaceDown();
+                CPU.get(i).setOver(50);
+            }
+            CPUWin.clear();
+        }
+        if (CPU.size()+CPUWin.size()==cards.size()){
+            JOptionPane.showMessageDialog(null, "I'm Sorry "+PlayerName+", but the CPU Won.");
+            System.out.println("CPU WINS");
+        }
+        repaint();
+    }
+    
+    //<editor-fold defaultstate="collapsed" desc="Mouse Events">
+    @Override
+    public void mouseClicked(MouseEvent e) { }
+    
+    @Override
+    public void mousePressed(MouseEvent e) {
+        //
+        //flips cards to war
+        //
+        if (!Player.isEmpty() && !CPU.isEmpty()){
+            if (Player.get(Player.size()-1).Contains(e.getX(), e.getY()) ||
+                CPU.get(CPU.size()-1).Contains(e.getX(), e.getY()))
+                {
+                   Shuffle(Player);
+                    PlayerWar.add(Player.get(Player.size()-1));
+                    Player.remove(Player.get(Player.size()-1));
+                    PlayerWar.get(0).setOver(365);
+                    PlayerWar.get(0).setImage();
+
+                    Shuffle(CPU);
+                    CPUWar.add(CPU.get(CPU.size()-1));
+                    CPU.remove(CPU.get(CPU.size()-1));
+                    CPUWar.get(0).setOver(289);
+                    CPUWar.get(0).setImage();
+                    repaint();
+                }
+        }
+        //
+        //decides who wins the war
+        //
+        if (!PlayerWar.isEmpty() && !CPUWar.isEmpty()){
+           if (PlayerWar.get(PlayerWar.size()-1).Contains(e.getX(), e.getY()) ||
+            CPUWar.get(CPUWar.size()-1).Contains(e.getX(), e.getY()))
+            {
+                ProcessCards();
+                repaint();
+                if (PlayerVictor){
+                    PlayerWin.addAll(PlayerWar);
+                    PlayerWin.addAll(CPUWar);
+                    PlayerVictor=false;
+                    PlayerWar.clear();
+                    CPUWar.clear();
+                }else if (CPUVictor){
+                    CPUWin.addAll(CPUWar);
+                    CPUWin.addAll(PlayerWar);
+                    CPUVictor=false;
+                    PlayerWar.clear();
+                    CPUWar.clear();
+                }
+                refillPlayerDeck();
+                refillCPUDeck();
+                repaint();
+            } 
+        }
+        //
+        //Starts game
+        //
+        if (!deck.isEmpty()){
+            if (deck.get(deck.size()-1).Contains(e.getX(), e.getY())){
+                PlayerName=JOptionPane.showInputDialog("Please Type Your Name Below:");
+
+            //<editor-fold defaultstate="collapsed" desc="Shuffle Overboard">
+            Shuffle(deck);
+            Shuffle(deck);
+            Shuffle(deck);
+            Shuffle(deck);
+            Shuffle(deck);
+            Shuffle(deck);
+            Shuffle(deck);
+            Shuffle(deck);
+            Shuffle(deck);
+            //</editor-fold>
+
+            //split deck into 2 hands CPU and Player
+            for (int in=0;in<52;in++){
+                if (in%2==0){
+                    Player.add(deck.get(in));
+                }else{
+                    CPU.add(deck.get(in));
+                }
+            }
+
+
+            for (int in=0;in<Player.size();in++){
+                Player.get(in).setOver(600);
+                Player.get(in).setFaceDown();
+            }
+
+            for (int in=0;in<CPU.size();in++){
+                CPU.get(in).setOver(50);
+                CPU.get(in).setFaceDown();
+            }
+
+            deck.clear();
+            repaint();
+            }
+        }
+    }
+    
+    @Override
+    public void mouseReleased(MouseEvent e) { }
+    
+    @Override
+    public void mouseEntered(MouseEvent e) { }
+    
+    @Override
+    public void mouseExited(MouseEvent e) { }
+    
+    @Override
+    public void mouseDragged(MouseEvent e) { }
+    @Override
+    public void mouseMoved(MouseEvent e) { }
+//</editor-fold>
+  
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JToggleButton ExtraButtons;
+    private javax.swing.JToggleButton MooreCatClassToggle;
+    private javax.swing.JButton NewGameButton;
+    private javax.swing.JButton NextTurn;
+    private javax.swing.JButton ProcessValues;
+    private javax.swing.JButton ResetButton;
+    private javax.swing.JLabel ShowCPUDeckAmount;
+    private javax.swing.JLabel ShowPlayerDeckAmount;
+    private javax.swing.JButton StartGameButton;
+    private javax.swing.JButton rulesButton;
+    // End of variables declaration//GEN-END:variables
+ 
+}
