@@ -1,6 +1,8 @@
 # War Card Game
 A playable card game of War with a GUI interface. There are also card games created by other students.
 
+Some code for basic functionality was provided by Dr. James Klayder and the game itself was programmed by Alec Barker. Some helper files are used that were created for Princeton University's CS department.
+
 To use the program, run the demoMenusAndCardLayout/MainFrame.java
 
 To play a game, click View in the upper menu. You can then choose a person's name to switch to their game. My game of War is under View > Barker
@@ -16,5 +18,3 @@ How to Play:
 PLEASE NOTE: Randomly choosing cards causes some odd bugs that I can't fix. If you encounter a bug, such as not being able to flip or drag a card, a card appears in the wrong place onscreen, or an error appears in the Java console, try hitting the "Get New Cards" button a few times. The bug should fix itself.
 
 My code can be found in the stuBarker package.
-
-Some code for basic functionality was provided by Dr. James Klayder and the game itself was programmed by Alec Barker.
