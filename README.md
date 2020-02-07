@@ -1,5 +1,5 @@
 # War Card Game
-A playable card game of War with a GUI interface from my second programming class, Programming and Problem Solving II, at the University of Mount Union. There are also card games created by other students.
+A playable card game of War with a GUI interface from my second programming class, Programming and Problem Solving II, at the University of Mount Union that was taught by Dr. James Klayder. There are also card games created by other students.
 
 Some code for basic functionality was provided by Dr. James Klayder and the game itself was programmed by Alec Barker. Some helper files are used that were created for Princeton University's CS department.
 
